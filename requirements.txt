@@ -1,0 +1,10 @@
+torch
+torchvision
+easydict
+numpy
+opencv-python
+gradio==4.38.1
+gradio-image-prompter
+fastapi==0.112.2
+git+https://github.com/facebookresearch/segment-anything.git
+onnxruntime-gpu==1.17.0
