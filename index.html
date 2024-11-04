@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="ZIM: Zero-Shot Image Matting for Anything">
+  <meta name="keywords" content="foundation, segmentation, SAM">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>ZIM: Zero-Shot Image Matting for Anything</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=database" />
+
+  <link rel="stylesheet" href="./css/bulma.min.css">
+  <link rel="stylesheet" href="./css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./css/twentytwenty.css">
+  <link rel="stylesheet" href="./css/index.css">
+
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/jquery.event.move.js"></script>
+  <script src="./js/jquery.twentytwenty.js"></script>
+  <script src="./js/bulma-carousel.min.js"></script>
+  <script src="./js/bulma-slider.min.js"></script>
+  <script src="./js/fontawesome.all.min.js"></script>
+
+  <!--MathJax-->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">ZIM: Zero-Shot Image Matting for Anything</h1>
+          <!-- <h1 class="subtitle is-3 publication-banner"><small>Under review</small></h2> -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://beomyoung-kim.github.io/" target="_blank" rel="noopener noreferrer">
+                Beomyoung Kim</a>,
+              <a href="" target="_blank" rel="noopener noreferrer">
+                Chanyong Shin</a>,
+              <a href="https://bestdeveloper691.github.io/" target="_blank" rel="noopener noreferrer">
+                Joonhyun Jeong</a>,
+              <a href="" target="_blank" rel="noopener noreferrer">
+                Hyungsik Jung</a>,
+              <br>
+              <a href="" target="_blank" rel="noopener noreferrer">
+                Se-Yun Lee</a>,
+                <a href="" target="_blank" rel="noopener noreferrer">
+                  Sewhan Chun</a>,
+              <a href="https://hwangdonghyun.github.io/" target="_blank" rel="noopener noreferrer">
+                Dong-Hyun Hwang</a>,
+              <a href="" target="_blank" rel="noopener noreferrer">
+                Joonsang Yu</a>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <br>
+            NAVER Cloud, ImageVision
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2411.00626" target="_blank" rel="noopener noreferrer"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf" style="color: orangered"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/naver-ai/ZIM" target="_blank" rel="noopener noreferrer"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>
+                    Code
+                  </span>
+                </a>
+              </span>
+              <!-- Hugging Face Space. -->
+              <span class="link-block">
+                <a href="https://huggingface.co/spaces/naver-iv/ZIM_Zero-Shot-Image-Matting" target="_blank" rel="noopener noreferrer"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      &#129303;
+                  </span>
+                  <span>Interactive Demo</span>
+                </a>
+              </span>
+              <!-- Data. -->
+              <span class="link-block">
+                <a href="https://huggingface.co/datasets/naver-iv/MicroMat-3K" target="_blank" rel="noopener noreferrer"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="material-symbols-outlined">
+                  database
+                  </span>                  
+                  <span>&nbsp Data</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="teaser" width="100%" src="./images/teaser.png" alt="Teaser image demonstrating improvements on ZIM."/>
+      <h2 class="subtitle has-text-centered">
+        Qualitative comparison of ours with five existing zero-shot models (SAM, HQ-SAM, Matte-Any, Matting-Any, and SMat).
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small mt-4">
+  <div class="hero-body">
+    <h3 class="title has-text-centered">
+      Qualitative samples
+    </h3>
+    <div class="container">
+      <div id="results-carousel-horizontal" class="carousel results-carousel">
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0618_2_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0618_2_sam.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0758_1_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0758_1_sam.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0806_2_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0806_2_sam.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0626_0_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0626_0_sam.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0031_2_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0031_2_sam.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0036_20_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0036_20_sam.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0177_5_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0177_5_sam.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0452_0_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0452_0_sam.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0476_0_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0476_0_sam.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0007_1_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0007_1_sam.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0622_2_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0622_2_sam.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0029_1_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0029_1_sam.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0682_1_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0682_1_sam.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-ZIM">
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0368_11_zim.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="./images/blend/cropped_0368_11_sam.png">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<section class="section pt-5">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">1. Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            In this paper, we introduce a novel zero-shot image matting model.
+            Recent models like SAM (Segment Anything Model) exhibit strong zero-shot capabilities, but they fall short in generating fine-grained, high-precision masks.
+            To address this limitation, we propose two key contributions: First, we develop a label converter that transforms segmentation labels into detailed matte labels, creating the new SA1B-Matte dataset. This enables the model to generate high-quality, micro-level matte masks without costly manual annotations. Second, we design a zero-shot matting model equipped with a hierarchical pixel decoder and prompt-aware masked attention mechanism, improving both the resolution of mask outputs and the model’s ability to focus on specific regions based on user prompts.
+            We evaluate our model using the newly introduced MicroMat-3K test set, which contains high-quality micro-level matte labels. Experimental results show that our model outperforms SAM and other existing methods in precision and zero-shot generalization. Furthermore, we demonstrate the versatility of our approach in downstream tasks, including image inpainting and 3D NeRF, where conditioning on precise masks is a preliminary for achieving optimal results. Our contributions provide a robust foundation for advancing zero-shot image matting and its downstream applications across a wide range of computer vision tasks.            
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+<section class="section pt-0">
+  <div class="container is-max-desktop">
+    <!-- Method. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">2. Constructing the Zero-Shot Matting Dataset</h2>
+        <div class="content has-text-justified">
+          <h3 class="title has-text-centered">
+            2.1. Label Converter
+          </h3>
+
+          <p>
+            For effective zero-shot matting, a dataset with micro-level matte labels is essential. However, manually annotating matte labels at the micro-level requires extensive human labor and cost.
+            To this end, we present an innovative <strong>Label Converter</strong> that transforms any segment label into a matte label.
+            The converter takes an image and segmentation label as input source and is trained to produce a corresponding matte label.
+            This approach poses two key challenges: (1) Generalization to micro-level objects, and (2) Unnecessary fine-grained representation.
+            To address these challenges, we introduce <strong>Spatial Generalization Augmentation (SGA)</strong> and <strong>Selective Transformation Learning (STL)</strong>.
+          </p>
+
+          <div class="image-container">
+            <figure class="image-1">
+              <img id="converter_label" src="./images/converter_label.png" alt="Label converter"/>
+              <figcaption>Selective Transformation Learning</figcaption>
+            </figure>
+            <figure class="image-2">
+              <img id="converter_training" src="./images/converter_training.png" alt="Training with converter"/>
+              <figcaption>Spatial Generalization Augmentation</figcaption>
+            </figure>
+          </div>
+          
+          <p class="mt-0">
+            <i>Refer to the paper for more details on SGA and STL.</i>
+          </p>
+
+          <h3 class="title has-text-centered">
+            2.2. SA1B-Matte Dataset
+          </h3>
+          <p>
+            After training the label converter, we transform segmentation labels in the SA1B dataset to matte labels using the converter, constructing the new SA1B-Matte dataset. The coarse labels in the SA1B dataset are successfully transformed into high-quality precise matte labels. Compared to existing public matting datasets consisting of macro-level fine labels, the SA1B-Matte dataset is a large-scale image matting dataset with micro-level fine labels, providing an ideal foundation for developing zero-shot matting models.
+          </p>
+          <img id="public_matting_datasets" width="100%" src="./images/public_matting_datasets.png" alt="Method overview"/>
+          <p class="mt-0">
+            <i>Qualitative samples from each dataset: Public matting datasets (left), SA1B dataset (center), and our proposed SA1B-Matte dataset (right).</i>
+          </p>
+          </p>
+          <img id="appendix_sa1b_matte" width="100%" src="./images/appendix_sa1b_matte.png" alt="Method overview"/>
+          <p class="mt-0">
+            <i>Qualitative samples of the SA1B dataset with micro-level coarse labels and our SA1B-Matte dataset with micro-level fine labels.</i>
+          </p>
+
+          <h3 class="title has-text-centered">
+            2.3. MicroMat-3K: Zero-Shot Matting Test Set
+          </h3>
+          <p>
+            We introduce a new test set, named MicroMat-3K, to evaluate zero-shot interactive image matting models.
+            It consists of 3,000 high-resolution images paired with micro-level matte labels, providing a comprehensive benchmark for testing various matting models under different levels of detail.
+            It includes two types of matte labels: (1) Fine-grained labels and (2) Coarse-grained labels.
+            Moreover, it provides pre-defined point prompt sets for positive and negative points and box prompt sets for evaluating interactive scenarios.
+          </p>
+          <img id="qualitative_micromat" width="100%" src="./images/qualitative_micromat.png" alt="Method overview"/>
+          <p class="mt-1">
+            <i>Refer to the paper for more details on MicroMat-3K dataset.</i>
+          </p>
+
+        </div>
+      </div>
+    </div>
+    <!--/ Method. -->
+  </div>
+</section>
+
+<section class="section pt-5">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">3. ZIM: Zero-Shot Image Matting Model</h2>
+        <div class="content has-text-justified">
+          <p>
+            Our proposed model, ZIM, builds upon the network architecture of SAM. As illustrated in the below figure, ZIM consists of four components:
+            (1) Image Encoder, (2) Prompt Encoder, (3) Transformer Decoder, and (4) Pixel Decoder.
+            While pixel decoder of SAM is insufficient for tasks requiring fine-grained feature representations and is prone to generate checkerboard artifacts,
+            we introduce a hierarchical pixel decoder with a multi-level feature pyramid design.
+            The image embedding is sequentially upsampled and concatenated with the corresponding feature maps at each resolution.
+            The decoder is designed to be highly lightweight, adding only 10ms of computational overhead compared to SAM's pixel decoder.
+            Moreover, we propose a Prompt-Aware Masked Attention mechanism inspired by Mask2Former, which allows the model to dynamically focus on the relevant regions within the image based on visual prompts,
+            enabling more precise attention to the areas of interest.
+          </p>
+
+          <img id="method_inference" width="100%" src="./images/method_overview.png" alt="Method overview"/>
+          <p class="mt-1">
+            <i>Overview of the ZIM architecture. Based on the SAM network architecture, we introduce two key improvements: (1) Hierarchical Pixel Decoder and (2) Prompt-Aware Masked Attention.</i>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+<section class="section pt-0 pb-4">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">4. Experiments</h2>
+        <div class="content has-text-justified">
+          <p>
+            Please refer to the paper for more detailed experimental settings and results.
+          </p>
+
+          <h3 class="title has-text-centered">
+            4.1. Quantitative results
+          </h3>
+
+          <img id="qualitative_amg1" width="100%" src="./images/Table1.png" alt="Method overview"/>
+          <p class="mt-0 mb-5">
+            <i>Quantitative comparison of our ZIM model and six existing methods on the MicroMat-3K dataset.</i>
+          </p>
+          <h3 class="title has-text-centered">
+            4.2. Qualitative samples
+          </h3>
+          <img id="qualitative_amg1" width="100%" src="./images/qualitative_amg_1.png" alt="Method overview"/>
+          <p class="mt-0 mb-5">
+            <i>(1) ADE20K, (2) BBBC038v1, (3) Cityscapes, (4) DOORS, (5) EgoHOS, (6) DRAM, (7) GTEA, (8) Hypersim, (9) IBD, (10) iShape, and (11) COCO datasets.</i>
+          </p>
+          
+          <img id="qualitative_amg2" width="100%" src="./images/qualitative_amg_2.png" alt="Method overview"/>
+          <p class="mt-0 mb-5">
+            <i>(12) NDD20, (13) NDISPark, (14) OVIS, (15) PIDRay, (16) Plittersdorf, (17) PPDLS, (18) STREETS, (19) TimberSeg, (20) TrashCan, (21) VISOR, (22) WoodScape, and (23) ZeroWaste-f datasets.</i>
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section pt-0 pb-4">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">5. Downstream tasks</h2>
+        <div class="content has-text-justified">
+          <h3 class="title has-text-centered">
+            5.1. Image Inpainting
+          </h3>
+          <img id="qualitative_inpainting" width="100%" src="./images/qualitative_remove.png" alt="Method overview"/>
+          <p class="mt-1">
+            <i>Qualitative results of three kinds of input masks (COCO ground-truth, SAM, and ZIM) along with their corresponding image inpainting results using the Inpainting Anything framework.</i>
+          </p>
+          
+          <h3 class="title has-text-centered">
+            5.2. 3D Object Segmentation with NeRF
+          </h3>
+          <img id="qualitative_nerf" width="100%" src="./images/qualitative_nerf.png" alt="Method overview"/>
+          <p class="mt-1">
+            <i>Qualitative samples of 3D object segmentation results guided by SAM and ZIM models with in SA3D framework for the LLFF-trex, LLFF-horns, and 360&deg;-kitchen (Lego) datasets.</i>
+          </p>
+
+          <h3 class="title has-text-centered">
+            5.3. Medical Image Segmentation
+          </h3>
+          <img id="qualitative_medical" width="100%" src="./images/qualitative_medical.png" alt="Method overview"/>
+          <p class="mt-1">
+            <i>Qualitative samples of SAM and ZIM output masks on the medical image datasets using the box prompt.</i>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+<script>
+    $(window).on('load', function() {
+      bulmaCarousel.attach('#results-carousel-horizontal', {
+        slidesToScroll: 1,
+        slidesToShow: 3,
+        loop: true,
+        autoplay: true,
+      });
+  
+      bulmaCarousel.attach('#results-carousel-vertical', {
+        slidesToScroll: 1,
+        slidesToShow: 5,
+        loop: true,
+        autoplay: true,
+      });
+  
+      bulmaCarousel.attach('#results-carousel-testimonials', {
+        slidesToScroll: 1,
+        slidesToShow: 3,
+        loop: true,
+        autoplay: true,
+        breakpoints: [
+          {
+            changePoint: 50 + 260 * 2,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            loop: true,
+            autoplay: true,
+          },
+          {
+            changePoint: 50 + 260 * 3,
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            loop: true,
+            autoplay: true,
+          },
+          {
+            changePoint: 50 + 260 * 4,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            loop: true,
+            autoplay: true,
+          }
+        ],
+      });
+  
+      $(".twentytwenty-container-top").twentytwenty({
+        before_label: 'Input',
+        after_label: 'GT',
+        default_offset_pct: 0.75,
+      });
+
+      $(".twentytwenty-container-ZIM").twentytwenty({
+        before_label: 'ZIM',
+        after_label: 'SAM',
+        default_offset_pct: 0.5,
+      });
+  
+      $('.results-carousel').css({
+        'max-height': '2000px',
+        'visibility': 'visible'
+      });
+    });
+  </script>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Citation</h2>
+    <pre class="selectable"><code>
+      TBD
+    </code></pre>
+  </div>
+</section>
+
+<footer class="footer pt-4 pb-0">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Website template based on
+            <a href="https://github.com/nerfies/nerfies.github.io">
+              Nerfies
+            </a>
+            and <a href="https://github.com/albert100121/Depth-Anywhere/tree/gh-page">
+              Depth Anywhere.
+            </a>
+            Licensed under
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+              CC-BY-SA-4.0
+            </a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

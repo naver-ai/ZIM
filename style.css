@@ -1,0 +1,67 @@
+/* style.css */
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+#container {
+    position: relative;
+    width: 50vw;
+    height: 50vh;
+    margin: auto;
+}
+
+canvas#renderer {
+    width: 100%;
+    height: 100%;
+}
+
+#controls {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+label {
+    margin-bottom: 5px;
+    display: block;
+}
+
+input[type=range] {
+    width: 200px;
+}
+
+.image-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  figure {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .image-1 {
+    width: 40%;
+  }
+  
+  .image-2 {
+    width: 40%;
+  }
+  
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  figcaption {
+    text-align: center;
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 5px;
+  }
