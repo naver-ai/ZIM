@@ -127,16 +127,15 @@
   </div>
 </section>
 
+
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <img id="teaser" width="100%" src="./images/teaser.png" alt="Teaser image demonstrating improvements on ZIM."/>
-      <h2 class="subtitle has-text-centered">
-        Qualitative comparison of ours with five existing zero-shot models (SAM, HQ-SAM, Matte-Any, Matting-Any, and SMat).
-      </h2>
+      <img id="teaser" width="100%" src="./images/amg.gif" alt="Teaser image demonstrating improvements on ZIM."/>
     </div>
   </div>
 </section>
+
 
 <section class="hero is-light is-small mt-4">
   <div class="hero-body">
@@ -355,21 +354,6 @@
           <p class="mt-0">
             <i>Qualitative samples of the SA1B dataset with micro-level coarse labels and our SA1B-Matte dataset with micro-level fine labels.</i>
           </p>
-
-          <h3 class="title has-text-centered">
-            2.3. MicroMat-3K: Zero-Shot Matting Test Set
-          </h3>
-          <p>
-            We introduce a new test set, named MicroMat-3K, to evaluate zero-shot interactive image matting models.
-            It consists of 3,000 high-resolution images paired with micro-level matte labels, providing a comprehensive benchmark for testing various matting models under different levels of detail.
-            It includes two types of matte labels: (1) Fine-grained labels and (2) Coarse-grained labels.
-            Moreover, it provides pre-defined point prompt sets for positive and negative points and box prompt sets for evaluating interactive scenarios.
-          </p>
-          <img id="qualitative_micromat" width="100%" src="./images/qualitative_micromat.png" alt="Method overview"/>
-          <p class="mt-1">
-            <i>Refer to the paper for more details on MicroMat-3K dataset.</i>
-          </p>
-
         </div>
       </div>
     </div>
@@ -406,18 +390,46 @@
   </div>
 </section>
 
+
+<section class="section pt-5">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">        
+        <h3 class="title has-text-centered">
+          4. MicroMat-3K: Zero-Shot Matting Test Set
+        </h3>
+        <p>
+          We introduce a new test set, named MicroMat-3K, to evaluate zero-shot interactive image matting models.
+          It consists of 3,000 high-resolution images paired with micro-level matte labels, providing a comprehensive benchmark for testing various matting models under different levels of detail.
+          It includes two types of matte labels: (1) Fine-grained labels and (2) Coarse-grained labels.
+          Moreover, it provides pre-defined point prompt sets for positive and negative points and box prompt sets for evaluating interactive scenarios.
+        </p>
+        <img id="qualitative_micromat" width="100%" src="./images/qualitative_micromat.png" alt="Method overview"/>
+        <p class="mt-1">
+          <i>Refer to the paper for more details on MicroMat-3K dataset.</i>
+        </p>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+
+
 <section class="section pt-0 pb-4">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">4. Experiments</h2>
+        <h2 class="title is-3">5. Experiments</h2>
         <div class="content has-text-justified">
           <p>
             Please refer to the paper for more detailed experimental settings and results.
           </p>
 
           <h3 class="title has-text-centered">
-            4.1. Quantitative results
+            5.1. Quantitative results
           </h3>
 
           <img id="qualitative_amg1" width="100%" src="./images/Table1.png" alt="Method overview"/>
@@ -425,8 +437,12 @@
             <i>Quantitative comparison of our ZIM model and six existing methods on the MicroMat-3K dataset.</i>
           </p>
           <h3 class="title has-text-centered">
-            4.2. Qualitative samples
+            5.2. Qualitative samples
           </h3>
+          <img id="qualitative" width="100%" src="./images/teaser.png" alt="Teaser image demonstrating improvements on ZIM."/>
+          <p class="mt-0 mb-5">
+            <i>Qualitative comparison of ours with five existing zero-shot models (SAM, HQ-SAM, Matte-Any, Matting-Any, and SMat).</i>
+          </p>
           <img id="qualitative_amg1" width="100%" src="./images/qualitative_amg_1.png" alt="Method overview"/>
           <p class="mt-0 mb-5">
             <i>(1) ADE20K, (2) BBBC038v1, (3) Cityscapes, (4) DOORS, (5) EgoHOS, (6) DRAM, (7) GTEA, (8) Hypersim, (9) IBD, (10) iShape, and (11) COCO datasets.</i>
@@ -448,10 +464,10 @@
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">5. Downstream tasks</h2>
+        <h2 class="title is-3">6. Downstream tasks</h2>
         <div class="content has-text-justified">
           <h3 class="title has-text-centered">
-            5.1. Image Inpainting
+            6.1. Image Inpainting
           </h3>
           <img id="qualitative_inpainting" width="100%" src="./images/qualitative_remove.png" alt="Method overview"/>
           <p class="mt-1">
@@ -459,7 +475,7 @@
           </p>
           
           <h3 class="title has-text-centered">
-            5.2. 3D Object Segmentation with NeRF
+            6.2. 3D Object Segmentation with NeRF
           </h3>
           <img id="qualitative_nerf" width="100%" src="./images/qualitative_nerf.png" alt="Method overview"/>
           <p class="mt-1">
@@ -467,7 +483,7 @@
           </p>
 
           <h3 class="title has-text-centered">
-            5.3. Medical Image Segmentation
+            6.3. Medical Image Segmentation
           </h3>
           <img id="qualitative_medical" width="100%" src="./images/qualitative_medical.png" alt="Method overview"/>
           <p class="mt-1">
