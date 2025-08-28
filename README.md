@@ -21,6 +21,7 @@ The recent segmentation foundation model, Segment Anything Model (SAM), exhibits
 ![Model overview](https://github.com/naver-ai/ZIM/releases/download/asset-v1/method_overview.png)
 
 ## Updates    
+- 2025.07.24: ZIM has been accepted to **ICCV 2025** as a **Highlight Paper**!
 - 2024.11.04: official ZIM code update
 
 
